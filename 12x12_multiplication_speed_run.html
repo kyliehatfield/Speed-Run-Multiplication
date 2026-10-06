@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cute 4th Grade Math - 12x12 Speed Run & Answer Key</title>
+  
+  <!-- Tailwind CSS, Lucide Icons & Canvas Confetti -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            strawberry: '#ffb3c1',
+            'strawberry-dark': '#ff758f',
+            mint: '#b7e4c7',
+            'mint-dark': '#74c69d',
+            banana: '#ffea00',
+            'banana-soft': '#fff3b0',
+            lavender: '#e2afff',
+            'lavender-dark': '#c77dff',
+            bubblegum: '#ff85a1',
+            sky: '#a2d2ff',
+            'sky-dark': '#3a86ff'
+          },
+          fontFamily: {
+            fredoka: ['Fredoka', 'sans-serif'],
+            quicksand: ['Quicksand', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: 'Fredoka', cursive, sans-serif;
+      background: linear-gradient(135deg, #ffd6ff 0%, #e7c6ff 50%, #c8b6ff 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      user-select: none;
+    }
+
+    /* 16:9 Aspect Ratio Container */
+    .slide-viewport {
+      width: 100%;
+      max-width: 1100px;
+      aspect-ratio: 16 / 9;
+      position: relative;
+      background: #ffffff;
+      border-radius: 28px;
+      box-shadow: 0 20px 40px rgba(112, 0, 255, 0.15), 0 0 0 8px rgba(255, 255, 255, 0.8);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      transform: scale(0.96) translateY(12px);
+      display: flex;
+      flex-direction: column;
+      padding: 1.75rem 2.25rem;
+      background: radial-gradient(circle at top left, #ffffff 60%, #fff0f5 100%);
+    }
+
+    .slide.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: scale(1) translateY(0);
+    }
+
+    /* Cute Bounce Button Effects */
+    .btn-cute {
+      transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .btn-cute:hover {
+      transform: translateY(-3px) scale(1.03);
+    }
+    .btn-cute:active {
+      transform: translateY(1px) scale(0.97);
+    }
+
+    /* Custom Scrollbar for Grid */
+    .custom-scroll::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scroll::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 10px;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: #ffb3c1;
+      border-radius: 10px;
+    }
+
+    /* Grid Input Style */
+    .grid-input {
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      font-weight: 700;
+      font-size: 0.85rem;
+      border: 1px solid #e2e8f0;
+      background: #ffffff;
+      transition: all 0.15s ease;
+      color: #2d3748;
+    }
+    .grid-input:focus {
+      outline: none;
+      background: #fff0f5;
+      border-color: #ff758f;
+      box-shadow: inset 0 0 0 2px #ff758f;
+      z-index: 10;
+    }
+    .grid-input.correct {
+      background: #d8f3dc !important;
+      color: #1b4332 !important;
+      border-color: #52b788 !important;
+    }
+    .grid-input.incorrect {
+      background: #ffccd5 !important;
+      color: #800f2f !important;
+      border-color: #ff4d6d !important;
+    }
+
+    /* Answer Key Specific Cell Styling */
+    .ak-cell {
+      background: #f0fdf4;
+      color: #166534;
+      font-weight: 800;
+      font-size: 0.8rem;
+      border: 1px solid #bbf7d0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+    }
+
+    /* Print / PDF Styles */
+    @media print {
+      body {
+        background: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+      .no-print {
+        display: none !important;
+      }
+      .slide-viewport {
+        box-shadow: none !important;
+        border: none !important;
+        width: 100vw !important;
+        height: auto !important;
+        max-width: none !important;
+        aspect-ratio: auto !important;
+        overflow: visible !important;
+      }
+      .slide {
+        position: relative !important;
+        opacity: 1 !important;
+        transform: none !important;
+        page-break-after: always;
+        break-after: page;
+        height: 100vh !important;
+        padding: 1.5cm !important;
+      }
+      body.print-current .slide:not(.active) {
+        display: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="w-full max-w-[1100px] flex flex-col gap-3">
+    
+    <!-- Top Action Bar -->
+    <div class="no-print flex justify-between items-center px-4 py-2.5 bg-white/80 backdrop-blur-md rounded-2xl shadow-sm border border-white/60">
+      <div class="flex items-center gap-2">
+        <span class="text-2xl">⚡</span>
+        <div>
+          <h1 class="text-base font-bold text-purple-900 tracking-wide leading-none">4th Grade Math Speed Run</h1>
+          <span class="text-[11px] text-purple-600 font-semibold">Interactive Practice Sheet & Answer Key Deck</span>
+        </div>
+      </div>
+      
+      <div class="flex items-center gap-2">
+        <button onclick="printCurrentSlide()" class="btn-cute px-3 py-1.5 rounded-xl bg-pink-100 hover:bg-pink-200 text-pink-700 font-semibold text-xs flex items-center gap-1.5">
+          <i data-lucide="download" class="w-3.5 h-3.5"></i>
+          <span>Download Current Slide</span>
+        </button>
+
+        <button onclick="printAllSlides()" class="btn-cute px-3 py-1.5 rounded-xl bg-purple-100 hover:bg-purple-200 text-purple-700 font-semibold text-xs flex items-center gap-1.5">
+          <i data-lucide="printer" class="w-3.5 h-3.5"></i>
+          <span>Download All Slides (PDF)</span>
+        </button>
+
+        <button onclick="toggleFullscreen()" class="btn-cute px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs flex items-center gap-1.5">
+          <i data-lucide="maximize" class="w-3.5 h-3.5"></i>
+          <span>Fullscreen</span>
+        </button>
+      </div>
+    </div>
+
+    <div id="viewport" class="slide-viewport">
+
+      <!-- ================= SLIDE 1: 12x12 STUDENT SPEED RUN SHEET ================= -->
+      <div class="slide active" id="slide-1">
+        <!-- Printable Student Header -->
+        <div class="flex justify-between items-center pb-2 border-b-2 border-dashed border-purple-200 mb-2">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-0.5 rounded-full bg-strawberry text-white font-bold text-xs">Worksheet</span>
+            <h2 class="text-lg font-bold text-purple-900">12×12 Multiplication Speed Run ⚡</h2>
+          </div>
+
+          <!-- Name & Time Fields for Printable Worksheet -->
+          <div class="flex items-center gap-4 text-xs font-bold text-gray-700">
+            <div class="flex items-center gap-1 border-b-2 border-gray-400 pb-0.5 w-36">
+              <span>Name:</span>
+            </div>
+            <div class="flex items-center gap-1 border-b-2 border-gray-400 pb-0.5 w-24">
+              <span>Date:</span>
+            </div>
+            <div class="flex items-center gap-1 border-b-2 border-gray-400 pb-0.5 w-20">
+              <span>Time:</span>
+            </div>
+            <div class="flex items-center gap-1 border-2 border-purple-300 rounded-lg px-2 py-0.5 bg-purple-50">
+              <span>Score: ____ / 144</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Timer & Interactive Controls (Hidden on Print) -->
+        <div class="no-print flex justify-between items-center my-1.5 bg-slate-50 p-2 rounded-xl border border-slate-200">
+          <div class="flex items-center gap-3">
+            <div class="flex items-center gap-1.5">
+              <i data-lucide="timer" class="w-4 h-4 text-pink-600"></i>
+              <span id="timer-display" class="font-mono font-bold text-base text-slate-800 w-16">00:00</span>
+            </div>
+
+            <div class="flex items-center gap-1.5">
+              <button id="start-btn" onclick="startTimer()" class="btn-cute px-2.5 py-1 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-xs flex items-center gap-1">
+                <i data-lucide="play" class="w-3 h-3"></i>
+                <span>Start</span>
+              </button>
+              <button id="stop-btn" onclick="stopTimer()" class="btn-cute px-2.5 py-1 rounded-lg bg-rose-500 hover:bg-rose-600 text-white font-bold text-xs flex items-center gap-1" disabled>
+                <i data-lucide="square" class="w-3 h-3"></i>
+                <span>Stop</span>
+              </button>
+              <button onclick="resetGrid()" class="btn-cute px-2 py-1 rounded-lg bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-xs">
+                <span>Reset</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <button onclick="checkGrid()" class="btn-cute px-3 py-1 rounded-lg bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs flex items-center gap-1">
+              <i data-lucide="check-circle-2" class="w-3.5 h-3.5"></i>
+              <span>Auto-Grade Digital Practice</span>
+            </button>
+            <span id="score-display" class="font-bold text-xs text-purple-900 bg-purple-100 px-2.5 py-1 rounded-lg border border-purple-200">0 / 144</span>
+          </div>
+        </div>
+
+        <!-- 12x12 Interactive Student Grid -->
+        <div class="flex-1 overflow-auto custom-scroll border border-slate-200 rounded-2xl bg-white shadow-inner">
+          <table class="w-full h-full border-collapse">
+            <thead>
+              <tr class="bg-purple-900 text-white text-xs">
+                <th class="p-1 border border-purple-800 w-8 sticky top-0 bg-purple-950 z-20">×</th>
+                <script>
+                  for(let i=1; i<=12; i++) {
+                    document.write(`<th class="p-1 border border-purple-800 sticky top-0 bg-purple-900 z-10 text-center font-bold">${i}</th>`);
+                  }
+                </script>
+              </tr>
+            </thead>
+            <tbody id="grid-body">
+              <!-- Dynamically Populated via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ================= SLIDE 2: 12x12 ANSWER KEY ================= -->
+      <div class="slide" id="slide-2">
+        <div class="flex justify-between items-center pb-2 border-b-2 border-dashed border-emerald-300 mb-2">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-0.5 rounded-full bg-emerald-600 text-white font-bold text-xs uppercase tracking-wider">Answer Key</span>
+            <h2 class="text-lg font-bold text-emerald-950">12×12 Speed Run Solution Key 🔑</h2>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-bold text-emerald-800 bg-emerald-100 px-3 py-1 rounded-full border border-emerald-300">
+              Upload to Google Classroom for Student Self-Checking ⭐
+            </span>
+          </div>
+        </div>
+
+        <!-- 12x12 Complete Answer Grid -->
+        <div class="flex-1 overflow-auto custom-scroll border-2 border-emerald-200 rounded-2xl bg-white shadow-sm">
+          <table class="w-full h-full border-collapse">
+            <thead>
+              <tr class="bg-emerald-800 text-white text-xs">
+                <th class="p-1 border border-emerald-900 w-8 sticky top-0 bg-emerald-950 z-20">×</th>
+                <script>
+                  for(let i=1; i<=12; i++) {
+                    document.write(`<th class="p-1 border border-emerald-900 sticky top-0 bg-emerald-800 z-10 text-center font-bold">${i}</th>`);
+                  }
+                </script>
+              </tr>
+            </thead>
+            <tbody>
+              <script>
+                for(let r=1; r<=12; r++) {
+                  document.write('<tr>');
+                  document.write(`<th class="p-1 border border-emerald-200 bg-emerald-100 text-emerald-900 font-bold text-xs text-center w-8">${r}</th>`);
+                  for(let c=1; c<=12; c++) {
+                    document.write(`<td class="p-0 border border-emerald-100 h-7 w-12"><div class="ak-cell">${r*c}</div></td>`);
+                  }
+                  document.write('</tr>');
+                }
+              </script>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Self-Correction Guidance Footer -->
+        <div class="mt-2 bg-emerald-50 border border-emerald-200 rounded-xl p-2.5 flex justify-between items-center text-xs text-emerald-900">
+          <div class="flex items-center gap-2">
+            <span class="text-base">📝</span>
+            <span class="font-semibold">Self-Check Checklist: Use a colored pen or digital highlighter to check your answers!</span>
+          </div>
+          <div class="flex items-center gap-3 font-bold">
+            <span class="text-emerald-700">144-130: Multiplication Master 🏆</span>
+            <span class="text-emerald-700">129-110: Fact Star ⭐</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Bottom Navigation Controls -->
+    <div class="no-print flex justify-between items-center px-6 py-3 bg-white/90 backdrop-blur-md rounded-2xl shadow-sm border border-white">
+      <button onclick="prevSlide()" class="btn-cute px-4 py-2 rounded-xl bg-pink-500 hover:bg-pink-600 text-white font-bold text-sm flex items-center gap-2 shadow-sm">
+        <i data-lucide="arrow-left" class="w-4 h-4"></i>
+        <span>Previous</span>
+      </button>
+
+      <!-- Slide Indicators -->
+      <div class="flex items-center gap-3">
+        <button onclick="goToSlide(1)" title="Slide 1: Student 12x12 Speed Run" class="indicator-dot w-7 h-3.5 rounded-full bg-pink-500 transition-all"></button>
+        <button onclick="goToSlide(2)" title="Slide 2: 12x12 Answer Key" class="indicator-dot w-3.5 h-3.5 rounded-full bg-slate-300 transition-all"></button>
+        <span id="slide-number" class="text-xs font-bold text-gray-500 ml-2">Slide 1 of 2</span>
+      </div>
+
+      <button onclick="nextSlide()" class="btn-cute px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-sm flex items-center gap-2 shadow-sm">
+        <span>Next</span>
+        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+      </button>
+    </div>
+
+  </div>
+
+  <script>
+    lucide.createIcons();
+
+    let currentSlide = 1;
+    const totalSlides = 2;
+
+    function updateSlides() {
+      for (let i = 1; i <= totalSlides; i++) {
+        const slide = document.getElementById(`slide-${i}`);
+        if (slide) slide.classList.toggle('active', i === currentSlide);
+      }
+
+      const dots = document.querySelectorAll('.indicator-dot');
+      dots.forEach((dot, idx) => {
+        if (idx + 1 === currentSlide) {
+          dot.className = 'indicator-dot w-7 h-3.5 rounded-full bg-pink-500 transition-all';
+        } else {
+          dot.className = 'indicator-dot w-3.5 h-3.5 rounded-full bg-slate-300 transition-all';
+        }
+      });
+
+      const slideTitles = [
+        "Slide 1: 12×12 Student Worksheet",
+        "Slide 2: 12×12 Answer Key"
+      ];
+
+      document.getElementById('slide-number').innerText = `${slideTitles[currentSlide - 1]} (${currentSlide}/${totalSlides})`;
+    }
+
+    function nextSlide() {
+      currentSlide = (currentSlide % totalSlides) + 1;
+      updateSlides();
+    }
+
+    function prevSlide() {
+      currentSlide = currentSlide === 1 ? totalSlides : currentSlide - 1;
+      updateSlides();
+    }
+
+    function goToSlide(slideNum) {
+      currentSlide = slideNum;
+      updateSlides();
+    }
+
+    // Print Options
+    function printCurrentSlide() {
+      document.body.classList.add('print-current');
+      window.print();
+      document.body.classList.remove('print-current');
+    }
+
+    function printAllSlides() {
+      document.body.classList.remove('print-current');
+      window.print();
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT') return;
+      if (e.key === 'ArrowRight' || e.key === 'Space') {
+        nextSlide();
+      } else if (e.key === 'ArrowLeft') {
+        prevSlide();
+      }
+    });
+
+    function toggleFullscreen() {
+      const elem = document.getElementById('viewport');
+      if (!document.fullscreenElement) {
+        elem.requestFullscreen().catch(err => {
+          console.error(err);
+        });
+      } else {
+        document.exitFullscreen();
+      }
+    }
+
+    // ================= Student Interactive Grid Engine =================
+    const gridBody = document.getElementById('grid-body');
+
+    function buildStudentGrid() {
+      gridBody.innerHTML = '';
+      for (let r = 1; r <= 12; r++) {
+        const tr = document.createElement('tr');
+        
+        const th = document.createElement('th');
+        th.className = 'p-1 border border-purple-200 bg-purple-100 text-purple-900 font-bold text-xs text-center w-8';
+        th.innerText = r;
+        tr.appendChild(th);
+
+        for (let c = 1; c <= 12; c++) {
+          const td = document.createElement('td');
+          td.className = 'p-0 border border-slate-200 h-7 w-12';
+          
+          const input = document.createElement('input');
+          input.type = 'text';
+          input.className = 'grid-input';
+          input.dataset.row = r;
+          input.dataset.col = c;
+          input.dataset.answer = r * c;
+
+          input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === 'ArrowRight') {
+              e.preventDefault();
+              const next = input.parentElement.nextElementSibling?.querySelector('input');
+              if (next) next.focus();
+            } else if (e.key === 'ArrowLeft') {
+              e.preventDefault();
+              const prev = input.parentElement.previousElementSibling?.querySelector('input');
+              if (prev && prev.tagName === 'INPUT') prev.focus();
+            }
+          });
+
+          td.appendChild(input);
+          tr.appendChild(td);
+        }
+        gridBody.appendChild(tr);
+      }
+    }
+
+    buildStudentGrid();
+
+    // Timer Logic
+    let timerInterval = null;
+    let secondsElapsed = 0;
+
+    function startTimer() {
+      if (timerInterval) return;
+      document.getElementById('start-btn').disabled = true;
+      document.getElementById('stop-btn').disabled = false;
+
+      timerInterval = setInterval(() => {
+        secondsElapsed++;
+        const mins = String(Math.floor(secondsElapsed / 60)).padStart(2, '0');
+        const secs = String(secondsElapsed % 60).padStart(2, '0');
+        document.getElementById('timer-display').innerText = `${mins}:${secs}`;
+      }, 1000);
+    }
+
+    function stopTimer() {
+      clearInterval(timerInterval);
+      timerInterval = null;
+      document.getElementById('start-btn').disabled = false;
+      document.getElementById('stop-btn').disabled = true;
+    }
+
+    function resetGrid() {
+      stopTimer();
+      secondsElapsed = 0;
+      document.getElementById('timer-display').innerText = '00:00';
+      document.getElementById('score-display').innerText = '0 / 144';
+      
+      const inputs = document.querySelectorAll('.grid-input');
+      inputs.forEach(input => {
+        input.value = '';
+        input.className = 'grid-input';
+      });
+    }
+
+    function checkGrid() {
+      stopTimer();
+      let correctCount = 0;
+      const inputs = document.querySelectorAll('.grid-input');
+
+      inputs.forEach(input => {
+        const val = input.value.trim();
+        const expected = input.dataset.answer;
+
+        if (val === '') {
+          input.className = 'grid-input';
+        } else if (val === expected) {
+          input.className = 'grid-input correct';
+          correctCount++;
+        } else {
+          input.className = 'grid-input incorrect';
+        }
+      });
+
+      document.getElementById('score-display').innerText = `${correctCount} / 144`;
+
+      if (correctCount >= 100) {
+        confetti({
+          particleCount: 120,
+          spread: 80,
+          origin: { y: 0.6 }
+        });
+      }
+    }
+  </script>
+</body>
+</html>
